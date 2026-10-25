@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.example.aplicacionpreguntas.R
@@ -17,7 +16,7 @@ fun ImagenPregunta(imagen: Int) {
     Image(
         painter = painterResource(imagen),
         contentDescription = stringResource(R.string.imagen_pregunta),
-        modifier = Modifier.size(Medidas.imagen).testTag("imagen")
+        modifier = Modifier.size(Medidas.imagen)
     )
 }
 
@@ -39,6 +38,6 @@ fun MensajeRespuesta(respuestaUsuario: Boolean?, respuestaCorrecta: Boolean) {
     Text(
         text = mensaje,
         color = color,
-        modifier = Modifier.heightIn(min = Medidas.altoMensaje).testTag("resultado")
+        modifier = Modifier.heightIn(min = Medidas.altoMensaje)
     )
 }

@@ -7,11 +7,11 @@
     <string name="pregunta_5">El sonido se propaga por el vacío.</string>
     <string name="boton_true">TRUE</string>
     <string name="boton_false">FALSE</string>
-    <string name="boton_next">NEXT</string>
+    <string name="boton_next">NEXT →</string>
     <string name="descripcion_siguiente">Siguiente pregunta</string>
     <string name="respuesta_correcta">¡Correcto!</string>
     <string name="respuesta_incorrecta">Respuesta incorrecta</string>
-    <string name="boton_prev">PREV</string>
+    <string name="boton_prev">← PREV</string>
     <string name="boton_random">RANDOM</string>
     <string name="imagen_pregunta">Imagen relacionada con la pregunta</string>
 </resources>

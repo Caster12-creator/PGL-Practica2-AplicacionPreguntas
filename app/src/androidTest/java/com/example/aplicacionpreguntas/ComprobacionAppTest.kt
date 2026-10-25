@@ -2,14 +2,12 @@ package com.example.aplicacionpreguntas
 
 import android.graphics.Bitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
-import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.aplicacionpreguntas.ui.pantallas.PantallaPreguntas
 import com.example.aplicacionpreguntas.ui.theme.AplicacionPreguntasTheme
-import org.junit.Assert.assertNotEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -31,38 +29,40 @@ class ComprobacionAppTest {
     @Test fun preguntasRespuestasPrevNextYRandom() {
         compose.setContent { AplicacionPreguntasTheme(dynamicColor = false) { PantallaPreguntas() } }
         val contexto = InstrumentationRegistry.getInstrumentation().targetContext
-        fun pulsar(tag: String) { compose.onNodeWithTag(tag).performClick(); compose.waitForIdle() }
+        fun pulsar(texto: Int) { compose.onNodeWithText(contexto.getString(texto)).performClick(); compose.waitForIdle() }
+        fun comprobarSinResultado() {
+            compose.onNodeWithText(contexto.getString(R.string.respuesta_correcta)).assertDoesNotExist()
+            compose.onNodeWithText(contexto.getString(R.string.respuesta_incorrecta)).assertDoesNotExist()
+        }
 
         captura("inicio")
-        compose.onNodeWithTag("imagen").assertIsDisplayed()
-        pulsar("false")
-        compose.onNodeWithTag("resultado").assertTextEquals(contexto.getString(R.string.respuesta_correcta))
+        compose.onNodeWithContentDescription(contexto.getString(R.string.imagen_pregunta)).assertIsDisplayed()
+        pulsar(R.string.boton_false)
+        compose.onNodeWithText(contexto.getString(R.string.respuesta_correcta)).assertIsDisplayed()
         captura("correcta")
-        pulsar("true")
-        compose.onNodeWithTag("resultado").assertTextEquals(contexto.getString(R.string.respuesta_incorrecta))
+        pulsar(R.string.boton_true)
+        compose.onNodeWithText(contexto.getString(R.string.respuesta_incorrecta)).assertIsDisplayed()
         captura("incorrecta")
 
-        pulsar("next")
-        compose.onNodeWithTag("resultado").assertTextEquals("")
-        compose.onNodeWithTag("pregunta").assertTextEquals(contexto.getString(R.string.pregunta_2))
+        pulsar(R.string.boton_next)
+        comprobarSinResultado()
+        compose.onNodeWithText(contexto.getString(R.string.pregunta_2)).assertIsDisplayed()
         captura("zelda")
-        pulsar("next"); captura("geografia")
-        pulsar("next"); captura("futbol")
-        pulsar("next"); captura("ciencia")
-        pulsar("next")
-        compose.onNodeWithTag("pregunta").assertTextEquals(contexto.getString(R.string.pregunta_1))
+        pulsar(R.string.boton_next); captura("geografia")
+        pulsar(R.string.boton_next); captura("futbol")
+        pulsar(R.string.boton_next); captura("ciencia")
+        pulsar(R.string.boton_next)
+        compose.onNodeWithText(contexto.getString(R.string.pregunta_1)).assertIsDisplayed()
 
-        pulsar("prev")
-        compose.onNodeWithTag("pregunta").assertTextEquals(contexto.getString(R.string.pregunta_5))
+        pulsar(R.string.boton_prev)
+        compose.onNodeWithText(contexto.getString(R.string.pregunta_5)).assertIsDisplayed()
         captura("prev")
-        pulsar("prev")
-        compose.onNodeWithTag("pregunta").assertTextEquals(contexto.getString(R.string.pregunta_4))
+        pulsar(R.string.boton_prev)
+        compose.onNodeWithText(contexto.getString(R.string.pregunta_4)).assertIsDisplayed()
         captura("prev_futbol")
-        val anterior = compose.onNodeWithTag("pregunta").fetchSemanticsNode().config[SemanticsProperties.Text]
-        pulsar("random")
-        val siguiente = compose.onNodeWithTag("pregunta").fetchSemanticsNode().config[SemanticsProperties.Text]
-        assertNotEquals(anterior, siguiente)
-        compose.onNodeWithTag("resultado").assertTextEquals("")
+        pulsar(R.string.boton_random)
+        compose.onNodeWithText(contexto.getString(R.string.pregunta_4)).assertDoesNotExist()
+        comprobarSinResultado()
         captura("random")
     }
 }

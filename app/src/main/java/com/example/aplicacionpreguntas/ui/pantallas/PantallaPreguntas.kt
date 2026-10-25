@@ -5,14 +5,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.example.aplicacionpreguntas.R
 import com.example.aplicacionpreguntas.model.Pregunta
 import com.example.aplicacionpreguntas.ui.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import com.example.aplicacionpreguntas.ui.componentes.ImagenPregunta
 import com.example.aplicacionpreguntas.ui.componentes.MensajeRespuesta
 
@@ -41,10 +37,10 @@ fun PantallaPreguntas(modifier: Modifier = Modifier) {
     }
 
     Column(
-        modifier = modifier.fillMaxSize().padding(Medidas.margen).testTag("pantalla"),
+        modifier = modifier.fillMaxSize().padding(Medidas.margen),
         verticalArrangement = Arrangement.spacedBy(Medidas.separacion)
     ) {
-        Text(preguntaActual.enunciado, modifier = Modifier.testTag("pregunta"))
+        Text(preguntaActual.enunciado)
 
         Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
             ImagenPregunta(imagenes[indicePregunta])
@@ -68,14 +64,14 @@ fun PantallaPreguntas(modifier: Modifier = Modifier) {
             Button(
                 onClick = { respuestaUsuario = true },
                 colors = ButtonDefaults.buttonColors(containerColor = colorTrue),
-                modifier = Modifier.weight(1f).testTag("true")
+                modifier = Modifier.weight(1f)
             ) {
                 Text(stringResource(R.string.boton_true))
             }
             Button(
                 onClick = { respuestaUsuario = false },
                 colors = ButtonDefaults.buttonColors(containerColor = colorFalse),
-                modifier = Modifier.weight(1f).testTag("false")
+                modifier = Modifier.weight(1f)
             ) {
                 Text(stringResource(R.string.boton_false))
             }
@@ -90,10 +86,8 @@ fun PantallaPreguntas(modifier: Modifier = Modifier) {
                     }
                     cambiarPregunta(anterior)
                 },
-                modifier = Modifier.weight(1f).testTag("prev")
+                modifier = Modifier.weight(1f)
             ) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
-                Spacer(Modifier.width(Medidas.pequena))
                 Text(stringResource(R.string.boton_prev))
             }
             Button(
@@ -104,11 +98,9 @@ fun PantallaPreguntas(modifier: Modifier = Modifier) {
                     }
                     cambiarPregunta(siguiente)
                 },
-                modifier = Modifier.weight(1f).testTag("next")
+                modifier = Modifier.weight(1f)
             ) {
                 Text(stringResource(R.string.boton_next))
-                Spacer(Modifier.width(Medidas.pequena))
-                Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null)
             }
         }
 
@@ -120,7 +112,7 @@ fun PantallaPreguntas(modifier: Modifier = Modifier) {
                 }
                 cambiarPregunta(aleatoria)
             },
-            modifier = Modifier.fillMaxWidth().testTag("random")
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text(stringResource(R.string.boton_random))
         }
