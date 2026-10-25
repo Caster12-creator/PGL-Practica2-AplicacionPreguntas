@@ -17,8 +17,8 @@ Aplicación de PGL hecha con Kotlin y Jetpack Compose. Incluye la parte obligato
 
 - `MainActivity.kt`: abre la pantalla y aplica el tema y los márgenes del sistema.
 - `model/Pregunta.kt`: guarda el enunciado y la respuesta correcta.
-- `ui/pantallas/PantallaPreguntas.kt`: contiene las preguntas y el estado del juego.
-- `ui/componentes/ComponentesPreguntas.kt`: contiene los botones reutilizables.
+- `ui/pantallas/PantallaPreguntas.kt`: contiene las preguntas, los botones y el estado del juego.
+- `ui/componentes/ComponentesPreguntas.kt`: muestra la imagen y el mensaje de respuesta.
 - `ui/Medidas.kt`: reúne las medidas y los colores que se usan varias veces.
 - `res/values/strings.xml`: guarda los textos.
 - `res/drawable`: contiene las cinco ilustraciones vectoriales.
@@ -40,3 +40,5 @@ Se ha comprobado en el emulador que las respuestas y las imágenes son correctas
 ```text
 ./gradlew assembleDebug connectedDebugAndroidTest lintDebug
 ```
+
+El código usa variables, funciones sencillas, `if` y un `while` para RANDOM. Los bloques `onClick` son los que necesita Compose para pulsar los botones.

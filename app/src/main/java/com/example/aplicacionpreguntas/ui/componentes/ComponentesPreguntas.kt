@@ -1,58 +1,44 @@
 package com.example.aplicacionpreguntas.ui.componentes
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material3.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.example.aplicacionpreguntas.R
 import com.example.aplicacionpreguntas.ui.*
 
 @Composable
-fun BotonesRespuesta(respuestaCorrecta: Boolean, respondida: Boolean, onResponder: (Boolean) -> Unit) {
-    val colorTrue = when {
-        !respondida -> MaterialTheme.colorScheme.primary
-        respuestaCorrecta -> VerdeCorrecto
-        else -> RojoIncorrecto
-    }
-    val colorFalse = when {
-        !respondida -> MaterialTheme.colorScheme.primary
-        !respuestaCorrecta -> VerdeCorrecto
-        else -> RojoIncorrecto
-    }
-    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(Medidas.separacion)) {
-        Button(
-            onClick = { onResponder(true) },
-            colors = ButtonDefaults.buttonColors(containerColor = colorTrue),
-            modifier = Modifier.weight(1f).testTag("true")
-        ) { Text(stringResource(R.string.boton_true)) }
-        Button(
-            onClick = { onResponder(false) },
-            colors = ButtonDefaults.buttonColors(containerColor = colorFalse),
-            modifier = Modifier.weight(1f).testTag("false")
-        ) { Text(stringResource(R.string.boton_false)) }
-    }
+fun ImagenPregunta(imagen: Int) {
+    Image(
+        painter = painterResource(imagen),
+        contentDescription = stringResource(R.string.imagen_pregunta),
+        modifier = Modifier.size(Medidas.imagen).testTag("imagen")
+    )
 }
 
 @Composable
-fun BotonesNavegacion(onAnterior: () -> Unit, onSiguiente: () -> Unit, onRandom: () -> Unit) {
-    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(Medidas.separacion)) {
-        OutlinedButton(onAnterior, Modifier.weight(1f).testTag("prev")) {
-            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
-            Spacer(Modifier.width(Medidas.pequena))
-            Text(stringResource(R.string.boton_prev))
-        }
-        Button(onSiguiente, Modifier.weight(1f).testTag("next")) {
-            Text(stringResource(R.string.boton_next))
-            Spacer(Modifier.width(Medidas.pequena))
-            Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null)
+fun MensajeRespuesta(respuestaUsuario: Boolean?, respuestaCorrecta: Boolean) {
+    var mensaje = ""
+    var color = RojoIncorrecto
+
+    if (respuestaUsuario != null) {
+        if (respuestaUsuario == respuestaCorrecta) {
+            mensaje = stringResource(R.string.respuesta_correcta)
+            color = VerdeCorrecto
+        } else {
+            mensaje = stringResource(R.string.respuesta_incorrecta)
+            color = RojoIncorrecto
         }
     }
-    OutlinedButton(onRandom, Modifier.fillMaxWidth().testTag("random")) {
-        Text(stringResource(R.string.boton_random))
-    }
+
+    Text(
+        text = mensaje,
+        color = color,
+        modifier = Modifier.heightIn(min = Medidas.altoMensaje).testTag("resultado")
+    )
 }

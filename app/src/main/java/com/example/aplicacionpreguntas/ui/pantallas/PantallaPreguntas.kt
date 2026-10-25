@@ -1,19 +1,20 @@
 package com.example.aplicacionpreguntas.ui.pantallas
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.example.aplicacionpreguntas.R
 import com.example.aplicacionpreguntas.model.Pregunta
 import com.example.aplicacionpreguntas.ui.*
-import com.example.aplicacionpreguntas.ui.componentes.BotonesNavegacion
-import com.example.aplicacionpreguntas.ui.componentes.BotonesRespuesta
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import com.example.aplicacionpreguntas.ui.componentes.ImagenPregunta
+import com.example.aplicacionpreguntas.ui.componentes.MensajeRespuesta
 
 @Composable
 fun PantallaPreguntas(modifier: Modifier = Modifier) {
@@ -46,35 +47,82 @@ fun PantallaPreguntas(modifier: Modifier = Modifier) {
         Text(preguntaActual.enunciado, modifier = Modifier.testTag("pregunta"))
 
         Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
-            Image(
-                painter = painterResource(imagenes[indicePregunta]),
-                contentDescription = stringResource(R.string.imagen_pregunta),
-                modifier = Modifier.size(Medidas.imagen).testTag("imagen")
-            )
+            ImagenPregunta(imagenes[indicePregunta])
         }
 
-        val haAcertado = respuestaUsuario == preguntaActual.respuestaCorrecta
-        Text(
-            text = if (respuestaUsuario == null) "" else stringResource(
-                if (haAcertado) R.string.respuesta_correcta else R.string.respuesta_incorrecta
-            ),
-            color = if (haAcertado) VerdeCorrecto else RojoIncorrecto,
-            modifier = Modifier.heightIn(min = Medidas.altoMensaje).testTag("resultado")
-        )
+        MensajeRespuesta(respuestaUsuario, preguntaActual.respuestaCorrecta)
 
-        BotonesRespuesta(
-            respuestaCorrecta = preguntaActual.respuestaCorrecta,
-            respondida = respuestaUsuario != null,
-            onResponder = { respuestaUsuario = it }
-        )
-
-        BotonesNavegacion(
-            onAnterior = { cambiarPregunta((indicePregunta - 1 + preguntas.size) % preguntas.size) },
-            onSiguiente = { cambiarPregunta((indicePregunta + 1) % preguntas.size) },
-            onRandom = {
-                val otrasPreguntas = preguntas.indices.filter { it != indicePregunta }
-                cambiarPregunta(otrasPreguntas.random())
+        var colorTrue = MaterialTheme.colorScheme.primary
+        var colorFalse = MaterialTheme.colorScheme.primary
+        if (respuestaUsuario != null) {
+            if (preguntaActual.respuestaCorrecta) {
+                colorTrue = VerdeCorrecto
+                colorFalse = RojoIncorrecto
+            } else {
+                colorTrue = RojoIncorrecto
+                colorFalse = VerdeCorrecto
             }
-        )
+        }
+
+        Row(horizontalArrangement = Arrangement.spacedBy(Medidas.separacion)) {
+            Button(
+                onClick = { respuestaUsuario = true },
+                colors = ButtonDefaults.buttonColors(containerColor = colorTrue),
+                modifier = Modifier.weight(1f).testTag("true")
+            ) {
+                Text(stringResource(R.string.boton_true))
+            }
+            Button(
+                onClick = { respuestaUsuario = false },
+                colors = ButtonDefaults.buttonColors(containerColor = colorFalse),
+                modifier = Modifier.weight(1f).testTag("false")
+            ) {
+                Text(stringResource(R.string.boton_false))
+            }
+        }
+
+        Row(horizontalArrangement = Arrangement.spacedBy(Medidas.separacion)) {
+            OutlinedButton(
+                onClick = {
+                    var anterior = indicePregunta - 1
+                    if (anterior < 0) {
+                        anterior = preguntas.size - 1
+                    }
+                    cambiarPregunta(anterior)
+                },
+                modifier = Modifier.weight(1f).testTag("prev")
+            ) {
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
+                Spacer(Modifier.width(Medidas.pequena))
+                Text(stringResource(R.string.boton_prev))
+            }
+            Button(
+                onClick = {
+                    var siguiente = indicePregunta + 1
+                    if (siguiente == preguntas.size) {
+                        siguiente = 0
+                    }
+                    cambiarPregunta(siguiente)
+                },
+                modifier = Modifier.weight(1f).testTag("next")
+            ) {
+                Text(stringResource(R.string.boton_next))
+                Spacer(Modifier.width(Medidas.pequena))
+                Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null)
+            }
+        }
+
+        OutlinedButton(
+            onClick = {
+                var aleatoria = (0 until preguntas.size).random()
+                while (aleatoria == indicePregunta) {
+                    aleatoria = (0 until preguntas.size).random()
+                }
+                cambiarPregunta(aleatoria)
+            },
+            modifier = Modifier.fillMaxWidth().testTag("random")
+        ) {
+            Text(stringResource(R.string.boton_random))
+        }
     }
 }
